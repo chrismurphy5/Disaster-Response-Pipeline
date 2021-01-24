@@ -25,6 +25,18 @@ import pickle
 
 
 def load_data(database_filepath):
+    """
+    Gather data from db into a dataframe
+    
+    Parameters:
+        database_filepath -- path to db
+        
+    Returns:
+        X -- features dataframe
+        y -- target dataframe
+        
+    
+    """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table(
         'messages',
@@ -42,6 +54,16 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """
+    Remove punctuations and stopwords, tokenize, lemmatize, normalize to lower case.
+    
+    Parameters:
+        text -- the message text 
+        
+    Returns:
+        clean_tokens -- the cleaned text, tokenized
+    
+    """
         
     #remove punctuation
     text = re.sub(r"[,.;@#?!&$]+\ *", " ", text)
@@ -66,6 +88,19 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    Build a Random Forrest Classifier using pipeline.
+    Find optimal paramters using Grid Search.
+    
+    Parameters:
+        None
+    
+    Returns:
+        cv -- the optimized model pipeline
+    
+    
+    
+    """
     pipeline = Pipeline([
    
         ('vect', CountVectorizer(tokenizer=tokenize)),
@@ -86,6 +121,21 @@ def build_model():
 
 
 def evaluate_model(model, X_test, y_test, category_names):
+    """
+    Display total accuracy.
+    For each category, display precision, recall, fscore and support
+    
+    Parameters:
+        model -- the optimized model pipeline
+        X_test -- the features data frame of the test set
+        y_test -- the target data frame of the test set
+        category_names -- the category names
+    
+    Returns:
+        None
+    
+    """
+    
     y_pred = model.predict(X_test)
     
     accuracy = (y_pred == y_test).mean()
@@ -99,6 +149,17 @@ def evaluate_model(model, X_test, y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    Save model to pickle file, to be used in web app
+    
+    Parameters:
+        model -- the optimized model pipeline
+        model_filepath -- path to save the pickle file to
+        
+    Returns:
+        None
+    
+    """
     pickle.dump(model,open(model_filepath,'wb'))
 
 
