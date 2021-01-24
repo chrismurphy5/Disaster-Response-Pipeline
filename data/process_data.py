@@ -57,7 +57,7 @@ def clean_data(df):
         categories[column] = categories[column].str[-1:]
 
         # convert column from string to numeric
-        categories[column] = categories[column].astype("int")
+        categories[column] = categories[column].astype(int)
         
     #Drop the categories column from the df dataframe since it is no longer needed
     df.drop(labels='categories', axis=1, inplace=True)
