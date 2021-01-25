@@ -59,6 +59,9 @@ def clean_data(df):
         # convert column from string to numeric
         categories[column] = categories[column].astype(int)
         
+    #get rid of the two entries in related column
+    categories = categories[categories['related']!=2]
+        
     #Drop the categories column from the df dataframe since it is no longer needed
     df.drop(labels='categories', axis=1, inplace=True)
     
